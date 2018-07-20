@@ -16,4 +16,4 @@ Install Robot Operating System (ROS), Kinetic or latter versions
  2. In "~myo_identifier", write the name of the Myo device the node should connect to
  3. In "~serial_port", write the path of the dongle to be used for the connection
  
- roslaunch rosmyo rosmyo.launch
+ In terminal, run: roslaunch rosmyo rosmyo.launch
