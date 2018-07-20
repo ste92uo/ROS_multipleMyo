@@ -4,7 +4,7 @@
 	<version>0.0.0</version>
 	<description>The rosmyo package</description>
 
-	<maintainer email="lorisbogo@studenti.unipd.it">Loris Bogo</maintainer>
+	<maintainer email="tortora@dei.unipd.it">Stefano Tortora</maintainer>
 	<license>BSD</license>
 
 	<buildtool_depend>catkin</buildtool_depend>
