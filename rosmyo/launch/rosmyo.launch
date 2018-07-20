@@ -1,9 +1,17 @@
 <launch>
-    <node name="myo" pkg="rosmyo" type="rosmyo_node" output="screen">
+    <node name="myo1" pkg="rosmyo" type="rosmyo_node" output="screen">
         <param name="~imu_enabled" value="true" />
         <param name="~emg_enabled" value="false" />
         <param name="~classifier_enabled" value="false" />
-        <param name="~myo_identifier" value="Myo" />
+        <param name="~myo_identifier" value="MyoName1" />
         <param name="~serial_port" value="/dev/ttyACM0" />
+    </node>
+    
+    <node name="myo2" pkg="rosmyo" type="rosmyo_node" output="screen">
+        <param name="~imu_enabled" value="true" />
+        <param name="~emg_enabled" value="false" />
+        <param name="~classifier_enabled" value="false" />
+        <param name="~myo_identifier" value="MyoName2" />
+        <param name="~serial_port" value="/dev/ttyACM1" />
     </node>
 </launch>
