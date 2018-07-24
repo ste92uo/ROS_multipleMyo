@@ -27,3 +27,55 @@ REQUIREMENTS:
  4. In pose_estimator node, in "~nao_joints_topic", write the topic for the pubblication of the estimated joints' angles (leave the default if you want to test the system on a NAO or Pepper robot).
  5. In "~nao_arm", write the robot arm to be controlled, either "right" (default) or "left"
  6. In terminal, run: roslaunch myoarmpose myoarmpose.launch
+ 
+N.B. The two Myo devices should be worn with the blue led pointing TOWARDS the hand.
+
+TO VISUALIZE THE RESULTS:
+1. Install NAOqi SDK
+2. Launch a virtual robot avatar on Rviz
+
+INSTALL NAOQI:
+
+sudo apt-get update
+
+sudo apt-get install ros-kinetic-nao-* ros-kinetic-octomap-ros ros-kinetic-octomap-msgs ros-kinetic-map-server ros-kinetic-fake-localization ros-kinetic-sbpl ros-kinetic-naoqi-* ros-kinetic-moveit*
+
+cd ~/Downloads
+
+git clone --branch 2.1.2.17 https://<your_bb_username>@bitbucket.org/iaslab-unipd/naoqi.git
+
+sudo mv naoqi /opt/
+
+echo "export PYTHONPATH=$PYTHONPATH:/opt/naoqi/pynaoqi-python2.7-2.1.2.17-linux64" >> ~/.bashrc
+
+echo "export AL_DIR=/opt/naoqi/naoqi-sdk-2.1.2.17-linux64" >> ~/.bashrc
+
+cd ~/workspace/ros/catkin/src
+
+git clone https://github.com/michieletto/naoqi_driver.git
+
+git clone https://github.com/ros-naoqi/naoqi_bridge.git
+
+git clone https://github.com/ros-naoqi/naoqi_bridge_msgs.git
+
+git clone https://github.com/FelipMarti/nao_robot.git
+
+git clone https://github.com/ros-naoqi/nao_extras.git
+
+cd ..
+catkin_make
+
+USE NAOQI:
+
+cd $AL_DIR
+
+./naoqi -b 127.0.0.1
+
+roslaunch nao_bringup nao_full.launch nao_ip:=127.0.0.1 network_interface:=lo
+
+rviz
+ -> Open the config file at src/nao_robot/nao_description/config/nao.rviz
+
+
+
+
