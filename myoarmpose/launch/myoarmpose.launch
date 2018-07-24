@@ -2,13 +2,13 @@
     <group ns="myos">
          <node name="arm" pkg="rosmyo" type="rosmyo_node" output="screen">
             <param name="~imu_enabled" value="true" />
-            <param name="~myo_identifier" value="ArmDx" />
+            <param name="~myo_identifier" value="Myo1" />
             <param name="~serial_port" value="/dev/ttyACM0" />
         </node>
         <node name="forearm" pkg="rosmyo" type="rosmyo_node" output="screen">
             <param name="~emg_enabled" value="true" />
             <param name="~imu_enabled" value="true" />
-            <param name="~myo_identifier" value="ArmSx" />
+            <param name="~myo_identifier" value="Myo2" />
             <param name="~classifier_enabled" value="true" />
             <param name="~serial_port" value="/dev/ttyACM1" />
         </node>
