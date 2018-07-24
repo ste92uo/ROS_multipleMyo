@@ -8,8 +8,8 @@
         <node name="forearm" pkg="rosmyo" type="rosmyo_node" output="screen">
             <param name="~emg_enabled" value="true" />
             <param name="~imu_enabled" value="true" />
-            <param name="~myo_identifier" value="Myo2" />
             <param name="~classifier_enabled" value="true" />
+            <param name="~myo_identifier" value="Myo2" />
             <param name="~serial_port" value="/dev/ttyACM1" />
         </node>
     </group>
