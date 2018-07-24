@@ -2,7 +2,6 @@
 
 import rospy
 from rosmyo.msg import ClassifierPose
-from myoarmemg.msg import Wrist_Yaw
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Vector3, Quaternion
 from tf.transformations import *
@@ -67,14 +66,12 @@ class MyoArmPose(object):
         arm_euler_topic = rospy.get_param('~arm_euler_topic', '/myos/arm/euler')
         forearm_euler_topic = rospy.get_param('~forearm_euler_topic', '/myos/forearm/euler')
         forearm_pose_topic = rospy.get_param('~forearm_pose_topic', '/myos/forearm/pose')
-        wrist_yaw_topic = rospy.get_param('~wrist_yaw_topic', '/myoarmemg/forearm/wrist_yaw')
         nao_joints_topic = rospy.get_param('~nao_joints_topic', '/nao_robot/pose/joint_angles')
 
         # Subscribers
         self.__sub_arm_imu = rospy.Subscriber(arm_imu_topic, Imu, self.sub_arm_imu, queue_size=MyoArmPose.TOPIC_QUEUE_SIZE)
         self.__sub_forearm_imu = rospy.Subscriber(forearm_imu_topic, Imu, self.sub_forearm_imu, queue_size=MyoArmPose.TOPIC_QUEUE_SIZE)
         self.__sub_forearm_pose = rospy.Subscriber(forearm_pose_topic, ClassifierPose, self.sub_forearm_pose)
-        self.__sub_forearm_yaw = rospy.Subscriber(wrist_yaw_topic, Wrist_Yaw, self.sub_forearm_yaw)
 
         # Publishers
         self.__pub_joints = rospy.Publisher(nao_joints_topic, JointAnglesWithSpeed,
@@ -93,7 +90,6 @@ class MyoArmPose(object):
         self.__arm_orientation_offset = None
         self.__forearm_orientation = [0, 0, 0, 1]
         self.__forearm_orientation_offset = None
-        self.__forearm_yaw = 0
 
         self.reset_arms()
         self.__q_to_ny = quaternion_from_euler(0, 0, math.pi)
@@ -113,11 +109,11 @@ class MyoArmPose(object):
 
         elbow_roll = math.acos(math.cos(Myo_E_roll)*math.cos(Myo_E_pitch))      # theta_R_4
 
-        if math.degrees(Myo_E_roll) <= 6 and abs(math.degrees(Myo_E_pitch)) <= 6:
+        if math.degrees(Myo_E_roll) <= 4 and abs(math.degrees(Myo_E_pitch)) <= 4:
             elbow_yaw = 0
-        elif math.degrees(Myo_E_roll) <= 6 and math.degrees(Myo_E_pitch) > 6:
+        elif math.degrees(Myo_E_roll) <= 4 and math.degrees(Myo_E_pitch) > 4:
             elbow_yaw = -math.pi / 2
-        elif math.degrees(Myo_E_roll) <= 6 and math.degrees(Myo_E_pitch) < -6:
+        elif math.degrees(Myo_E_roll) <= 4 and math.degrees(Myo_E_pitch) < -4:
             elbow_yaw = math.pi / 2
         else:
             elbow_yaw = -math.atan(math.tan(Myo_E_pitch)/math.sin(Myo_E_roll))       # theta_R_3
@@ -167,9 +163,6 @@ class MyoArmPose(object):
             self.__arm_orientation_offset = None
             self.__forearm_orientation_offset = None
 
-    def sub_forearm_yaw(self, msg):
-        self.__forearm_yaw = msg.sample
-
     def sub_forearm_imu(self, msg):
         orientation = quat_to_iterable(msg.orientation)
 
@@ -187,8 +180,6 @@ class MyoArmPose(object):
         # Update robot pose if both Myos are sending their orientation
         if self.__arm_orientation is not None:
             angles = self.calculate_angles(self.__arm_orientation, self.__forearm_orientation)
-            angles = list(angles)
-            angles[4] = self.__forearm_yaw
             self.publish_joints(self.__joint_names, angles)
 
     def sub_arm_imu(self, msg):
@@ -208,8 +199,6 @@ class MyoArmPose(object):
         # Update robot pose if both Myos are sending their orientation
         if self.__forearm_orientation is not None:
             angles = self.calculate_angles(self.__arm_orientation, self.__forearm_orientation)
-            angles = list(angles)
-            angles[4] = self.__forearm_yaw
             self.publish_joints(self.__joint_names, angles)
 
     def run(self):
