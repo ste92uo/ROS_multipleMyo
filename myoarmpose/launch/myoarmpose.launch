@@ -17,6 +17,8 @@
     <node name="pose_estimator" pkg="myoarmpose" type="myoarmpose_node" output="screen">
         <param name="~arm_imu_topic" value="/myos/arm/imu" />
         <param name="~forearm_imu_topic" value="/myos/forearm/imu" />
+        <param name="~arm_euler_topic" value="/myos/arm/euler" />
+        <param name="~forearm_euler_topic" value="/myos/forearm/euler" />
         <param name="~forearm_pose_topic" value="/myos/forearm/classifier_pose" />
         <param name="~nao_joints_topic" value="/nao_robot/pose/joint_angles" />
         <param name="~nao_arm" value="right" />
